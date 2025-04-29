@@ -2,10 +2,11 @@ const http = require('http');
 const { spawn } = require('child_process');
 const readline = require('readline');
 const fetch = require('node-fetch');
+require('dotenv').config();
 
 // Configuration
-const SERVER_PORT = 3000;
-const SERVER_URL = `http://localhost:${SERVER_PORT}`;
+const SERVER_PORT = process.env.PORT || 3000;
+const SERVER_URL = process.env.SERVER_URL || `http://localhost:${SERVER_PORT}`;
 const HEALTH_CHECK_INTERVAL = 5000; // 5 seconds
 const SESSION_KEY = 'test-session-' + Date.now(); // Generate a unique session key
 
