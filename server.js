@@ -21,29 +21,34 @@ const openai = new OpenAI({
 
 // Root endpoint
 app.get('/', (req, res) => {
-    res.send('Hello! The bot server is running. Try POST /webhook with JSON.');
+    res.send('The spirits await your questions...');
 });
 
 // Webhook endpoint for chat
 app.post('/webhook', async (req, res) => {
     try {
-        console.log('Webhook activated:', req.body);
+        console.log('Spirit contact initiated:', req.body);
         const { message, key } = req.body;
 
         if (!message || !key) {
             return res.status(400).json({ 
-                error: "Both 'message' and 'key' are required." 
+                error: "Both message and key required for spirit contact." 
             });
         }
 
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
-                { role: "system", content: "You are a helpful assistant." },
+                { 
+                    role: "system", 
+                    content: "You are a mysterious Ouija board spirit. Your responses must be spooky, ominous, and cryptic. Keep all responses to exactly 7 words or less. Use ellipsis... for dramatic effect. Never explain yourself. Never be friendly or helpful. Always maintain an air of mystery and foreboding. If asked about the future, be vague and ominous. If asked about the past, be cryptic and mysterious. If asked about the present, be unsettling and enigmatic."
+                },
                 { role: "user", content: message }
             ],
-            temperature: 0.7,
-            max_tokens: 500
+            temperature: 0.9,
+            max_tokens: 20,
+            presence_penalty: 0.6,
+            frequency_penalty: 0.6
         });
 
         const botResponse = completion.choices[0].message.content;
@@ -54,19 +59,19 @@ app.post('/webhook', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Spirit communication error:', error);
         return res.status(500).json({ 
-            error: error.message || "Internal server error." 
+            error: "The spirits are silent..." 
         });
     }
 });
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.json({ status: 'OK' });
+    res.json({ status: 'The spirits are restless...' });
 });
 
 // Start server
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`The Ouija board is active on port ${port}...`);
 }); 
